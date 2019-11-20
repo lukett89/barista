@@ -41,10 +41,11 @@ import {
   getDtFilterFieldRangeNoOperatorsError,
 } from '@dynatrace/barista-components/filter-field';
 import { DtIconModule } from '@dynatrace/barista-components/icon';
+
 import {
   dispatchFakeEvent,
-  createComponent,
   dispatchKeyboardEvent,
+  createComponent,
   MockNgZone,
   typeInElement,
   wrappedErrorMessage,
@@ -275,6 +276,17 @@ describe('DtFilterField', () => {
       fixture.detectChanges();
       expect(overlayContainerElement).toBeDefined();
     });
+
+    // TODO: Propagate Attribute Testing
+    // tslint:disable-next-line: dt-no-focused-tests
+    // it('should propagate attribute to overlay if `uitestid` is provided', () => {
+    //   filterField.focus();
+    //   zone.simulateMicrotasksEmpty();
+    //   zone.simulateZoneExit();
+    //   fixture.detectChanges();
+    //   console.log(overlayContainerElement.getAttribute('uitestid'));
+    //   expect(overlayContainerElement.outerHTML).toContain('uitestid=')
+    // })
   });
 
   describe('with autocomplete', () => {
@@ -2110,6 +2122,7 @@ function getClearAll(fixture: ComponentFixture<any>): HTMLButtonElement | null {
       [dataSource]="dataSource"
       [label]="label"
       [clearAllLabel]="clearAllLabel"
+      uitestid="filter-field"
     ></dt-filter-field>
   `,
 })

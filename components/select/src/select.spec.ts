@@ -74,9 +74,9 @@ import {
   dispatchEvent,
   dispatchFakeEvent,
   dispatchKeyboardEvent,
+  createComponent,
   createKeyboardEvent,
   wrappedErrorMessage,
-  createComponent,
 } from '@dynatrace/barista-components/testing';
 
 describe('DtSelect', () => {
@@ -707,6 +707,16 @@ describe('DtSelect', () => {
         expect(overlayContainerElement.textContent).toContain('Steak');
         expect(overlayContainerElement.textContent).toContain('Pizza');
         expect(overlayContainerElement.textContent).toContain('Tacos');
+      }));
+
+      it('should propagate attribute to overlay if `uitestid` is provided', fakeAsync(() => {
+        trigger.click();
+        fixture.detectChanges();
+        flush();
+
+        expect(overlayContainerElement.innerHTML).toContain(
+          'uitestid="select-overlay"',
+        );
       }));
 
       it('should close the panel when an item is clicked', fakeAsync(() => {
@@ -2018,6 +2028,7 @@ describe('DtSelect', () => {
         [aria-label]="ariaLabel"
         [aria-labelledby]="ariaLabelledby"
         [panelClass]="panelClass"
+        uitestid="select"
       >
         <dt-option
           *ngFor="let food of foods"
