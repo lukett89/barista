@@ -18,7 +18,9 @@ import {
   BuilderOutput,
   BuilderContext,
   Target,
+  createBuilder,
 } from '@angular-devkit/architect';
+import {} from '@angular-devkit/core';
 
 import { writeFileSync } from 'fs';
 import { join, dirname, resolve } from 'path';
