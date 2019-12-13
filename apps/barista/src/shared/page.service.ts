@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AsyncSubject, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, tap, catchError } from 'rxjs/operators';
 
 import { BaLocationService } from './location.service';
 
@@ -25,6 +25,8 @@ import { environment } from '../environments/environment';
 import { BaSinglePageContent } from '@dynatrace/barista-components/barista-definitions';
 
 const CONTENT_PATH_PREFIX = 'data/';
+
+const FILE_NOT_FOUND_ID = '404';
 
 /**
  * CODE COPIED FROM: 'https://github.com/angular/angular/blob/master/aio/src/app/documents/document.service.ts' and modified
@@ -71,13 +73,26 @@ export class BaPageService {
 
     this.http
       .get<BaSinglePageContent>(requestPath, { responseType: 'json' })
-      .pipe
-      // tap(data => {
-      //   console.log(data);
-      // })
-      ()
+      .pipe(
+        tap(data => {
+          if (!data || typeof data !== 'object') {
+            console.log('received invalid data:', data);
+            throw Error('Invalid data');
+          }
+        }),
+        catchError((error: HttpErrorResponse) => {
+          return error.status === 404 ? this.getFileNotFoundDoc(id) : '';
+        }),
+      )
       .subscribe(subject);
 
     return subject.asObservable();
+  }
+
+  private getFileNotFoundDoc(id) {
+    const requestPath = `${environment.dataHost}${CONTENT_PATH_PREFIX}${FILE_NOT_FOUND_ID}.json`;
+    return this.http.get<BaSinglePageContent>(requestPath, {
+      responseType: 'json',
+    });
   }
 }
