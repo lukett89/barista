@@ -90,6 +90,7 @@ export class BaPageService {
   }
 
   private getFileNotFoundDoc(id) {
+    console.log('couldnt find', id);
     const requestPath = `${environment.dataHost}${CONTENT_PATH_PREFIX}${FILE_NOT_FOUND_ID}.json`;
     return this.http.get<BaSinglePageContent>(requestPath, {
       responseType: 'json',
