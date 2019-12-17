@@ -716,20 +716,6 @@
         }
       }
     },
-    "schematics": {
-      "projectType": "library",
-      "root": "components/schematics",
-      "sourceRoot": "components/schematics/src",
-      "architect": {
-        "build": {
-          "builder": "@dynatrace/barista-builders:typescript",
-          "options": {
-            "tsConfig": "components/schematics/tsconfig.json",
-            "outDir": "dist/components/schematics"
-          }
-        }
-      }
-    },
     "components": {
       "projectType": "library",
       "root": "components",
@@ -2229,8 +2215,14 @@
       "projectType": "library",
       "root": "components/schematics",
       "sourceRoot": "components/schematics/src",
-      "prefix": "dt",
       "architect": {
+        "build": {
+          "builder": "@dynatrace/barista-builders:typescript",
+          "options": {
+            "tsConfig": "components/schematics/tsconfig.lib.json",
+            "outDir": "dist/components/schematics"
+          }
+        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
@@ -2248,8 +2240,7 @@
             "tsConfig": "components/schematics/tsconfig.spec.json"
           }
         }
-      },
-      "schematics": {}
+      }
     },
     "secondary-nav": {
       "projectType": "library",

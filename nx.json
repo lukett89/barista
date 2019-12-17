@@ -43,9 +43,6 @@
     "examples": {
       "tags": ["type:library"]
     },
-    "schematics": {
-      "tags": ["scope:tooling"]
-    },
     "linting": {
       "tags": ["scope:tooling"]
     },

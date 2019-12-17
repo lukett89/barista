@@ -14,31 +14,26 @@
  * limitations under the License.
  */
 
-import { chain, Rule, SchematicContext } from '@angular-devkit/schematics';
+import { Rule, SchematicContext } from '@angular-devkit/schematics';
 import { Tree } from '@angular-devkit/schematics/src/tree/interface';
-import { join } from 'path';
-import { updateWorkspace, getWorkspace } from '../../utils/workspace';
-import { ExtendedSchema } from '../schema';
+import * as ts from 'typescript';
 import {
+  addImportToSourceFile,
+  createPropertyAssignment,
+  createStringLiteral,
+  NgModuleProperties,
+  printNode,
   readFileFromTree,
   updateNgModuleDecoratorProperties,
-  createPropertyAssignment,
-  NgModuleProperties,
-  addImportToSourceFile,
-  printNode,
-  createStringLiteral,
 } from '../../utils';
-import * as ts from 'typescript';
-
-const NO_VALID_PROJECT_ERROR =
-  'The specified project is not a valid angular project with a main entry file!';
+import { ExtendedSchema } from '../schema';
 
 /**
  * The updateWorkspaceRule modifies the `angular.json` to add all necessary
  * styles and assets to the specified project
  */
 export function updateNgModuleRule(options: ExtendedSchema): Rule {
-  return (tree: Tree, context: SchematicContext) => {
+  return (tree: Tree, _context: SchematicContext) => {
     // TODO: lukas.holzer check later on when no module is provided resolve it via the
     // workspace with the provided build target. project.architect.build.options.main
     // in the main file the module should be bootstrapped.

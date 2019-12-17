@@ -74,8 +74,8 @@ export function updateNgModuleDecoratorProperties(
       decorator.expression.arguments.forEach(
         (argument: ts.ObjectLiteralExpression) => {
           const prop = argument.properties.find(
-            (prop: ts.PropertyAssignment) => {
-              const name = getSymbolName(prop);
+            (agrumentProperty: ts.PropertyAssignment) => {
+              const name = getSymbolName(agrumentProperty);
               if (name === propertyType) {
                 return true;
               }

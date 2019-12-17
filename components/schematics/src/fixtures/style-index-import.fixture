@@ -1,8 +1,0 @@
-@import '~@dynatrace/angular-components/style/index';
-body {
-  background: red;
-}
-
-h1 {
-  font-size: 120%;
-}

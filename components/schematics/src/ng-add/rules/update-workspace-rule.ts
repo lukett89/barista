@@ -15,6 +15,10 @@
  */
 
 import {
+  AssetPattern,
+  Schema as BuildAngularSchema,
+} from '@angular-devkit/build-angular/src/browser/schema';
+import {
   chain,
   Rule,
   SchematicContext,
@@ -23,12 +27,6 @@ import {
 import { join } from 'path';
 import { updateWorkspace } from '../../utils/workspace';
 import { ExtendedSchema } from '../schema';
-import {
-  Schema as BuildAngularSchema,
-  AssetPattern,
-} from '@angular-devkit/build-angular/src/browser/schema';
-import { json } from '@angular-devkit/core';
-import { inputNames } from '@angular/cdk/schematics';
 
 const ORGANIZATION_PACKAGE_PATH = 'node_modules/@dynatrace';
 const PACKAGE_NODE_MODULES_PATH = join(

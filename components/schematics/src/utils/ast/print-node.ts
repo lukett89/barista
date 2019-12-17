@@ -21,10 +21,7 @@ import {
   createSourceFile,
   NewLineKind,
   createPrinter,
-  isSourceFile,
 } from 'typescript';
-
-import * as ts from 'typescript';
 
 /**
  * Prints a typescript node and returns the result

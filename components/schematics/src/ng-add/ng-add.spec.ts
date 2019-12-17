@@ -29,7 +29,7 @@ import { UnitTestTree } from '@angular-devkit/schematics/testing';
 const devkitSchematics = require('@angular-devkit/schematics');
 
 export async function testNgAdd(
-  tree: Tree,
+  testTree: Tree,
   options: Partial<Schema> = {},
 ): Promise<void> {
   const schemaOptions: Schema = {
@@ -38,7 +38,7 @@ export async function testNgAdd(
     typography: true,
     ...options,
   };
-  await runSchematic('ng-add', schemaOptions, tree);
+  await runSchematic('ng-add', schemaOptions, testTree);
 }
 
 let tree: UnitTestTree;
