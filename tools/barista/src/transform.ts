@@ -127,6 +127,24 @@ export const headingIdTransformer: BaPageTransformer = async source => {
   return transformed;
 };
 
+/** Adds ids to each headline on the page. */
+export const copyHeadlineTransformer: BaPageTransformer = async source => {
+  const transformed = { ...source };
+  if (source.content && source.content.length) {
+    transformed.content = runWithCheerio(source.content, $ => {
+      const headlines = $('h1, h2, h3, h4, h5, h6');
+      if (headlines.length) {
+        headlines.each((_, headline) => {
+          const id = $(headline).attr('id');
+          const spanElement = `<ba-headline-link id="${id}"></ba-headline-link>`;
+          $(headline).append(spanElement);
+        });
+      }
+    });
+  }
+  return transformed;
+};
+
 /** Removes internal links from the content on public build. */
 export function internalLinksTransformerFactory(
   isPublic: boolean,
