@@ -213,6 +213,9 @@
     },
     "tree-table": {
       "tags": ["scope:components", "type:library"]
+    },
+    "barista-backend": {
+      "tags": ["type:app"]
     }
   }
 }
