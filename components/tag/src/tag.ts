@@ -55,19 +55,6 @@ export class DtTag<T> {
   @Input() value?: T;
 
   /**
-   * @deprecated Disabled property on tags has no longer any use.
-   * @breaking-change Disabled property will be removed in version 5.0.0
-   */
-  @Input()
-  get disabled(): boolean {
-    return this._disabled;
-  }
-  set disabled(value: boolean) {
-    this._disabled = coerceBooleanProperty(value);
-  }
-  private _disabled = false;
-
-  /**
    * Decides whether the tag is removable by the user.
    */
   @Input()
@@ -85,8 +72,6 @@ export class DtTag<T> {
 
   /** @internal Emits an removed event if the tag is not disabled. */
   _removeTag(): void {
-    if (!this._disabled) {
-      this.removed.emit(this.value);
-    }
+    this.removed.emit(this.value);
   }
 }
