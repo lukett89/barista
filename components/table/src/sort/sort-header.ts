@@ -90,11 +90,9 @@ export class DtSortHeader extends _DtSortHeaderMixinBase
   private _sortable = true;
 
   /**
-   * Overrides the sort start value of the containing DtSort
-   *
-   * @breaking-change 5.0.0 Make internal
+   * @internal Overrides the sort start value of the containing DtSort
    */
-  @Input() start: DtSortDirection;
+  _start: DtSortDirection;
 
   /** ID of this sort header. The name of the dtColumnDef is used as the id */
   private _id: string;

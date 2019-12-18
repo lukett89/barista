@@ -118,7 +118,7 @@ export class DtSort extends _DtSortMixinBase
       const sortable = sortableOrActive;
       if (this.active !== sortable.id) {
         this.active = sortable.id;
-        this.direction = sortable.start ? sortable.start : this.start;
+        this.direction = sortable._start ? sortable._start : this.start;
       } else {
         this.direction = this.getNextSortDirection(sortable);
       }
@@ -132,7 +132,7 @@ export class DtSort extends _DtSortMixinBase
     if (!sortable) {
       return '';
     }
-    const sortDirectionCycle = getSortDirection(sortable.start || this.start);
+    const sortDirectionCycle = getSortDirection(sortable._start || this.start);
 
     // Get and return the next direction in the cycle
     let nextDirectionIndex = sortDirectionCycle.indexOf(this.direction) + 1;

@@ -267,11 +267,11 @@ describe('DtSort', () => {
   });
 
   it('should be able to cycle from asc -> desc from either start point', () => {
-    component.sortHeaderA.start = 'asc';
+    component.sortHeaderA._start = 'asc';
     testSingleColumnSortDirectionSequence(fixture, ['asc', 'desc']);
 
     // Reverse directions
-    component.sortHeaderA.start = 'desc';
+    component.sortHeaderA._start = 'desc';
     testSingleColumnSortDirectionSequence(fixture, ['desc', 'asc']);
   });
 
