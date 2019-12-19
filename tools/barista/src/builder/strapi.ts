@@ -24,6 +24,7 @@ import {
   markdownToHtmlTransformer,
   transformPage,
   headingIdTransformer,
+  copyHeadlineTransformer,
 } from '../transform';
 import {
   BaPageBuilder,
@@ -40,6 +41,7 @@ const STRAPI_ENDPOINT = process.env.STRAPI_ENDPOINT;
 const TRANSFORMERS: BaPageTransformer[] = [
   markdownToHtmlTransformer,
   headingIdTransformer,
+  copyHeadlineTransformer,
 ];
 
 /** Page-builder for Strapi CMS pages. */

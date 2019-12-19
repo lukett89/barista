@@ -97,7 +97,7 @@ export const headingIdTransformer: BaPageTransformer = async source => {
   const transformed = { ...source };
   if (source.content && source.content.length) {
     transformed.content = runWithCheerio(source.content, $ => {
-      const headlines = $('h1, h2, h3, h4, h5, h6');
+      const headlines = $('h2, h3, h4, h5, h6');
       if (headlines.length) {
         headlines.each((_, headline) => {
           const text = $(headline).text();
@@ -132,12 +132,12 @@ export const copyHeadlineTransformer: BaPageTransformer = async source => {
   const transformed = { ...source };
   if (source.content && source.content.length) {
     transformed.content = runWithCheerio(source.content, $ => {
-      const headlines = $('h1, h2, h3, h4, h5, h6');
+      const headlines = $('h2, h3, h4, h5, h6');
       if (headlines.length) {
         headlines.each((_, headline) => {
           const id = $(headline).attr('id');
-          const spanElement = `<ba-headline-link id="${id}"></ba-headline-link>`;
-          $(headline).append(spanElement);
+          const headlineLink = `<ba-headline-link id="${id}"></ba-headline-link>`;
+          $(headline).append(headlineLink);
         });
       }
     });

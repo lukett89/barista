@@ -21,13 +21,13 @@ import { DtToast } from 'components/toast/src/toast';
 @Component({
   selector: 'ba-headline-link',
   templateUrl: 'headline-link.html',
-  // styleUrls: ['./icon-color-wheel.scss'],
+  host: {
+    'aria-hidden': 'true',
+  },
 })
 export class BaHeadlineLink {
   @Input() id: string;
 
-  /** Message which is displayed when the link to the headline is successfully copied */
-  private _toastMessage = 'Copied to clipboard';
   toastRef: DtToastRef | null = null;
 
   constructor(private _toast: DtToast) {}
@@ -38,10 +38,10 @@ export class BaHeadlineLink {
       const link = `${window.location.origin}${window.location.pathname}#${this.id}`;
 
       if (document) {
-        const textarea = this._createTextArea(link);
-        textarea.select();
+        const inputElement = this._createInputElement(link);
+        inputElement.select();
         const copyResult = document.execCommand('copy');
-        document.body.removeChild(textarea);
+        document.body.removeChild(inputElement);
 
         if (copyResult) {
           this._createToast();
@@ -53,7 +53,7 @@ export class BaHeadlineLink {
   /**
    * Creates a non-visible inputfield with the given string as value.
    */
-  private _createTextArea(value: string): HTMLInputElement {
+  private _createInputElement(value: string): HTMLInputElement {
     const inputElement = document.createElement('input');
     inputElement.style.position = 'absolute';
     inputElement.style.right = '0';
@@ -72,6 +72,6 @@ export class BaHeadlineLink {
    * Creates Toast after successfully copying the link to the clipboard
    */
   private _createToast(): void {
-    this.toastRef = this._toast.create(this._toastMessage);
+    this.toastRef = this._toast.create('Copied to clipboard');
   }
 }
