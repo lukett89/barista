@@ -33,12 +33,6 @@ const toReplaceSelectors = [
     to: '',
   },
   { from: 'dt-card-actions-spacing', to: 'dt-button-child-button-spacing' },
-  { from: 'default-font', to: 'dt-default-font' },
-  { from: 'h1-font', to: 'dt-h1-font' },
-  { from: 'h2-font', to: 'dt-h2-font' },
-  { from: 'h3-font', to: 'dt-h3-font' },
-  { from: 'code-font', to: 'dt-code-font' },
-  { from: 'label-font', to: 'dt-label-font' },
 ];
 
 export function removeCssSelectors(): Rule {

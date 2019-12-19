@@ -15,26 +15,23 @@
  */
 
 import {
-  BuilderOutput,
   BuilderContext,
+  BuilderOutput,
   Target,
-  createBuilder,
 } from '@angular-devkit/architect';
-import {} from '@angular-devkit/core';
-
-import { writeFileSync } from 'fs';
-import { join, dirname, resolve } from 'path';
 import { NgPackagrBuilderOptions } from '@angular-devkit/build-ng-packagr';
-import {
-  tryJsonParse,
-  NgPackagerJson,
-  AngularJson,
-  PackageJson,
-} from '../util/json-utils';
-import { syncPeerDependencyPlaceholder } from './sync-dependencies';
-import { PackagerOptions } from './schema';
-import { copyStyles, copyAssets } from './copy-assets';
 import { green } from 'chalk';
+import { writeFileSync } from 'fs';
+import { dirname, join, resolve } from 'path';
+import {
+  AngularJson,
+  NgPackagerJson,
+  PackageJson,
+  tryJsonParse,
+} from '../util/json-utils';
+import { copyAssets, copyStyles } from './copy-assets';
+import { PackagerOptions } from './schema';
+import { syncPeerDependencyPlaceholder } from './sync-dependencies';
 
 /**
  * This runs all necessary steps to create a bundle for the library

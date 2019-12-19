@@ -15,13 +15,13 @@
  */
 
 import { Tree } from '@angular-devkit/schematics';
+import { PackageJsonDependencyType } from '../../interfaces/package-json.interface';
 import {
   appendPropertyInJsonAst,
   findJsonPropertyInAst,
   insertPropertyInJsonAst,
   readJsonFromTree,
 } from '../../utils';
-import { PackageJsonDependencyType } from '../../interfaces/package-json.interface';
 
 const INDENT_SIZE = 2;
 const PKG_JSON_DEFAULT_PATH = '/package.json';
@@ -33,6 +33,7 @@ export interface NodeDependency {
   overwrite?: boolean;
 }
 
+/** Adds a dependency to the specified package.json inside a schematics tree */
 export function addPkgJsonDependency(
   tree: Tree,
   dependency: NodeDependency,

@@ -23,6 +23,8 @@ export interface Schema {
   typography?: boolean;
   /** The path to the NgModule where the imports will be registered */
   module?: string;
+  /** Skip the install of the dependencies from the package.json */
+  skipInstall: boolean;
 }
 
 /** Schema with extended options that are needed for different rules */

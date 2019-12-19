@@ -6,27 +6,36 @@
   "properties": {
     "project": {
       "type": "string",
-      "description": "Name of the project where the Barista Components should be set up.",
-      "$default": {
-        "$source": "projectName"
-      }
+      "description": "Name of the project where the Barista Components should be set up."
     },
     "module": {
       "type": "string",
       "subtype": "filepath",
-      "description": "The path to the NgModule where the imports will be registered"
+      "description": "The path to the NgModule where the imports will be registered",
+      "x-prompt": "The path to the NgModule where the imports will be registered:",
+      "default": "src/app/app.module.ts",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
     },
     "animations": {
       "type": "boolean",
-      "default": true,
       "description": "Whether Angular browser animations should be set up.",
-      "x-prompt": "Set up browser animations for Barista Components?"
+      "x-prompt": "Set up browser animations for Barista Components?",
+      "default": true
     },
     "typography": {
       "type": "boolean",
-      "default": false,
       "description": "Whether to set up global typography styles.",
-      "x-prompt": "Set up global Barista typography styles?"
+      "x-prompt": "Set up global Barista typography styles?",
+      "default": false
+    },
+    "skipInstall": {
+      "type": "boolean",
+      "description": "Skip installing after adding @dynatrace/barista-components",
+      "x-prompt": "Skip installing dependencies?",
+      "default": false
     }
   },
   "required": [],

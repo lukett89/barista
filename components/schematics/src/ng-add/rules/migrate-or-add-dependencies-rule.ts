@@ -67,9 +67,6 @@ export function migrateOrAddDependenciesRule(options: ExtendedSchema): Rule {
       )!;
 
       if (options.animations) {
-        options.peerDependencies[
-          '@angular/platform-browser-dynamic'
-        ] = ngCoreVersionTag;
         options.peerDependencies['@angular/animations'] = ngCoreVersionTag;
       }
     }

@@ -20,9 +20,9 @@ If you want to test the schematic on a real world app you should perform the
 following steps:
 
 - Run `ng build` - this builds the library including the schematics and puts it
-  into the `dist/lib` folder
+  into the `dist/components` folder
 - Link the npm dependency of the `@dynatrace/barista-components` to the
-  `dist/lib` folder
+  `dist/components` folder
 - run
   `ng update @dynatrace/barista-components --migrateOnly=true --from="4.8.0" --to="5.0.0"`
   with the correct versions respectively

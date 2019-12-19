@@ -23,7 +23,6 @@ import {
 /**
  * Adds Dependencies to the package.json
  * Used to add library specific dependencies.
- * @param options from schema.d.ts
  */
 export function addDependencies(
   dependencies: NodeDependency[],

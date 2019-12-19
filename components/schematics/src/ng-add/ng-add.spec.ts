@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import { noop, Tree } from '@angular-devkit/schematics';
+import { noop, Tree, externalSchematic } from '@angular-devkit/schematics';
+import { UnitTestTree } from '@angular-devkit/schematics/testing';
 import {
   addFixtureToTree,
-  runSchematic,
-  createWorkspace,
   addLegacyComponents,
+  createWorkspace,
+  runSchematic,
 } from '../testing';
 import { readFileFromTree, readJsonAsObjectFromTree } from '../utils';
 import { Schema } from './schema';
-import { UnitTestTree } from '@angular-devkit/schematics/testing';
 
-// used for mocking the externalSchematic function
-const devkitSchematics = require('@angular-devkit/schematics');
+import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
+import { COULD_NOT_FIND_PROJECT_ERROR } from './rules';
 
 export async function testNgAdd(
   testTree: Tree,
@@ -35,7 +35,9 @@ export async function testNgAdd(
   const schemaOptions: Schema = {
     project: 'testProject',
     animations: true,
+    module: '',
     typography: true,
+    skipInstall: true,
     ...options,
   };
   await runSchematic('ng-add', schemaOptions, testTree);
@@ -49,24 +51,23 @@ beforeEach(async () => {
 
 // Testing of Dynatrace Ng-Add Schematic
 describe('Migrate existing angular-components to barista components', () => {
-  let externalSchematicsMock: jest.Mock;
+  let externalSchematicsSpy: jest.SpyInstance;
 
   beforeEach(async () => {
-    externalSchematicsMock = devkitSchematics.externalSchematic = jest
+    externalSchematicsSpy = (externalSchematic as any) = jest
       .fn()
       .mockReturnValue(noop());
-
     await addLegacyComponents(tree);
   });
 
   afterEach(() => {
-    externalSchematicsMock.mockClear();
+    externalSchematicsSpy.mockClear();
   });
 
   it('should call the migration schematic when legacy imports are detected', async () => {
     await testNgAdd(tree, { project: undefined });
-    expect(externalSchematicsMock).toBeCalledTimes(1);
-    expect(externalSchematicsMock).toBeCalledWith(
+    expect(externalSchematicsSpy).toBeCalledTimes(1);
+    expect(externalSchematicsSpy).toBeCalledWith(
       expect.stringMatching(/collection\.json$/),
       'update-5.0.0',
       {},
@@ -197,5 +198,28 @@ describe('New workspace', () => {
 
     await testNgAdd(tree, { project: undefined });
     expect(readJsonAsObjectFromTree(tree, '/package.json')).toMatchSnapshot();
+  });
+
+  it('should install all the dependencies when skipInstall is set to false', async () => {
+    const devkitTasksMock = ((NodePackageInstallTask as any) = jest
+      .fn()
+      .mockImplementation(() => ({
+        toConfiguration: jest.fn().mockReturnValue({
+          name: 'node-package',
+        }),
+      })));
+
+    await testNgAdd(tree, { project: undefined, skipInstall: false });
+    expect(devkitTasksMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('should throw if a project is provided that does not exist', async () => {
+    try {
+      await testNgAdd(tree, { project: 'asdf' });
+    } catch (e) {
+      expect(e.message).toBe(COULD_NOT_FIND_PROJECT_ERROR('asdf'));
+    } finally {
+      expect.assertions(1);
+    }
   });
 });

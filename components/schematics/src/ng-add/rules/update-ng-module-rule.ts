@@ -28,10 +28,7 @@ import {
 } from '../../utils';
 import { ExtendedSchema } from '../schema';
 
-/**
- * The updateWorkspaceRule modifies the `angular.json` to add all necessary
- * styles and assets to the specified project
- */
+/** The updateNgModuleRule modifies the app module */
 export function updateNgModuleRule(options: ExtendedSchema): Rule {
   return (tree: Tree, _context: SchematicContext) => {
     // TODO: lukas.holzer check later on when no module is provided resolve it via the

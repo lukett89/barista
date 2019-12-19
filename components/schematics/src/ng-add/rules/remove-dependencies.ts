@@ -21,7 +21,6 @@ import { readJsonFromTree, findJsonPropertyInAst } from '../../utils';
 /**
  * Adds Dependencies to the package.json
  * Used to add library specific dependencies.
- * @param options from schema.d.ts
  */
 export function removeDependencies(
   dependencies: string[],
@@ -35,7 +34,7 @@ export function removeDependencies(
 
     // loop over all dependencies and add them to the json.
     dependencies.forEach((dependency: string) => {
-      // add dependency to the package.json
+      // remove dependency from package.json
       removeDependency(host, dependency, packageJsonPath);
     });
     return host;

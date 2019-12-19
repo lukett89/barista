@@ -20,12 +20,23 @@ import {
   Tree,
   chain,
 } from '@angular-devkit/schematics';
+import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { Schema, ExtendedSchema } from './schema';
 import { readFileFromTree, readJsonAsObjectFromTree } from '../utils';
 import { PackageJson } from '../interfaces/package-json.interface';
 import { updateWorkspaceRule } from './rules/update-workspace-rule';
 import { migrateOrAddDependenciesRule } from './rules/migrate-or-add-dependencies-rule';
 import { updateNgModuleRule } from './rules/update-ng-module-rule';
+
+/** Install the dependencies from the package.json */
+function addInstallTask(options: ExtendedSchema): Rule {
+  return (host: Tree, context: SchematicContext) => {
+    if (!options.skipInstall) {
+      context.addTask(new NodePackageInstallTask());
+    }
+    return host;
+  };
+}
 
 /**
  * Schematic factory entry-point for the `ng-add` schematic. The ng-add schematic will be
@@ -51,6 +62,7 @@ export default function(options: Schema): Rule {
       migrateOrAddDependenciesRule(extendedOptions),
       updateWorkspaceRule(extendedOptions),
       updateNgModuleRule(extendedOptions),
+      addInstallTask(extendedOptions),
     ]);
 
     return rule(tree, context);
