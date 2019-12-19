@@ -22,6 +22,7 @@ import { BaPageMetaBase } from '@dynatrace/barista-components/barista-definition
 @Component({
   selector: 'ba-error-page',
   templateUrl: 'error-page.html',
+  styleUrls: ['error-page.scss'],
 })
 export class BaErrorPage implements BaPage {
   contents: BaPageMetaBase;

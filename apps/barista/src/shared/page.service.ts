@@ -39,6 +39,8 @@ export class BaPageService {
    */
   private _cache = new Map<string, Observable<BaSinglePageContent>>();
 
+  pageIs404 = false;
+
   /**
    * The current page that should be displayed.
    */
@@ -78,6 +80,9 @@ export class BaPageService {
           if (!data || typeof data !== 'object') {
             console.log('received invalid data:', data);
             throw Error('Invalid data');
+          } else {
+            console.log('found page');
+            this.pageIs404 = false;
           }
         }),
         catchError((error: HttpErrorResponse) => {
@@ -90,6 +95,7 @@ export class BaPageService {
   }
 
   private getFileNotFoundDoc(id) {
+    this.pageIs404 = true;
     console.log('couldnt find', id);
     const requestPath = `${environment.dataHost}${CONTENT_PATH_PREFIX}${FILE_NOT_FOUND_ID}.json`;
     return this.http.get<BaSinglePageContent>(requestPath, {

@@ -52,6 +52,10 @@ export class BaApp {
    */
   _breadcrumbs$ = this._locationService.currentPath$.pipe(
     map((path: string) => {
+      console.log('creating breadcrumbs');
+      if (this._pageService.pageIs404) {
+        return {};
+      }
       let previousPath = '';
       return path.split('/').map((part: string) => {
         previousPath = `${previousPath}/${part}`;
