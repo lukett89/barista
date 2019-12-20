@@ -196,6 +196,9 @@ jobs:
           root: ~/barista
           paths:
             - .
+      - store_artifacts:
+          path: dist/components
+          destination: bundle
 
 # - run unit tests
   unit-test:

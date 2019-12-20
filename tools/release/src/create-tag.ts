@@ -55,7 +55,7 @@ function createTag(
     process.exit(1);
   }
 
-  if (!git.createTag(packageJsonVersion)) {
+  if (!git.createTag(packageJsonVersion, '')) {
     console.error(
       red(`Could not create a Tag for version ${packageJsonVersion}`),
     );

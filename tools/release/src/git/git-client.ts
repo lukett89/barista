@@ -87,8 +87,26 @@ export class GitClient {
   }
 
   /** Creates a tag for the specified commit reference. */
-  createTag(tagName: string): boolean {
-    return this._spawnGitProcess(['tag', tagName]).status === 0;
+  createTag(tagName: string, message: string): boolean {
+    return this._spawnGitProcess(['tag', tagName, '-m', message]).status === 0;
+  }
+
+  /** Checks whether the specified tag exists locally. */
+  hasLocalTag(tagName: string): boolean {
+    return (
+      this._spawnGitProcess(['rev-parse', `refs/tags/${tagName}`], false)
+        .status === 0
+    );
+  }
+
+  /** Gets the Git SHA of the specified local tag. */
+  getShaOfLocalTag(tagName: string): string {
+    // We need to use the "^{}" suffix to instruct Git to deference the tag to
+    // the actual commit. See: https://www.git-scm.com/docs/git-rev-parse
+    return this._spawnGitProcess([
+      'rev-parse',
+      `refs/tags/${tagName}^{}`,
+    ]).stdout.trim();
   }
 
   /** Push committed changes to remote */

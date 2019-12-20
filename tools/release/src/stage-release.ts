@@ -18,40 +18,31 @@ import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { bold, cyan, green, italic, red, yellow } from 'chalk';
 import { prompt } from 'inquirer';
-import * as OctokitApi from '@octokit/rest';
 
 import { promptAndGenerateChangelog } from './changelog';
 import { getReleaseCommit } from './release-check';
 import { GitClient } from './git/git-client';
-import { getGithubBranchCommitsUrl } from './git/github-urls';
+// import { getGithubBranchCommitsUrl } from './git/github-urls';
 import { promptForNewVersion } from './new-version-prompt';
-import { Version, parseVersionName } from './parse-version';
-import { getAllowedPublishBranch } from './publish-branch';
+import { parseVersionName } from './parse-version';
+// import { getAllowedPublishBranch } from './publish-branch';
+import { BaseReleaseTask } from './base-release';
 
 /** Default filename for the changelog. */
-const CHANGELOG_FILE_NAME = 'CHANGELOG.md';
+export const CHANGELOG_FILE_NAME = 'CHANGELOG.md';
 
-class StageReleaseTask {
-  /** Path to the project package JSON. */
-  packageJsonPath: string;
-
-  /** Serialized package.json of the specified project. */
-  packageJson: any;
-
-  /** Parsed current version of the project. */
-  currentVersion: Version;
-
-  /** Instance of a wrapper that can execute Git commands. */
-  git: GitClient;
-
-  /** Octokit API instance that can be used to make Github API calls. */
-  githubApi: OctokitApi;
-
+class StageReleaseTask extends BaseReleaseTask {
   constructor(
     public projectDir: string,
     public repositoryOwner: string,
     public repositoryName: string,
   ) {
+    super(
+      new GitClient(
+        projectDir,
+        `https://github.com/${repositoryOwner}/${repositoryName}.git`,
+      ),
+    );
     this.packageJsonPath = join(projectDir, 'package.json');
 
     if (!existsSync(this.packageJsonPath)) {
@@ -79,18 +70,12 @@ class StageReleaseTask {
       );
       process.exit(1);
     }
-
-    this.git = new GitClient(
-      projectDir,
-      `https://github.com/${repositoryOwner}/${repositoryName}.git`,
-    );
-    this.githubApi = new OctokitApi();
   }
 
   async run(): Promise<void> {
     console.log();
     console.log(cyan('-----------------------------------------------------'));
-    console.log(cyan('  Dynatrace Angular Components stage release script'));
+    console.log(cyan('  Dynatrace Barista Components stage release script'));
     console.log(cyan('-----------------------------------------------------'));
     console.log();
 
@@ -101,24 +86,25 @@ class StageReleaseTask {
 
     console.log();
 
-    this.verifyNoUncommittedChanges();
+    // this.verifyNoUncommittedChanges();
 
     // Branch that will be used to stage the release for the
     // new selected version.
-    const publishBranch = this._switchToPublishBranch(newVersion);
+    // const publishBranch = this._switchToPublishBranch(newVersion);
+    // const publishBranch = 'publish-release';
 
-    this.verifyLocalCommitsMatchUpstream(publishBranch);
-    await this._verifyPassingGithubStatus(publishBranch);
+    // this.verifyLocalCommitsMatchUpstream(publishBranch);
+    // await this._verifyPassingGithubStatus(publishBranch);
 
-    if (!this.git.checkoutNewBranch(stagingBranch)) {
-      console.error(
-        red(
-          `Could not create release staging branch: ${stagingBranch}. ` +
-            `Aborting...`,
-        ),
-      );
-      process.exit(1);
-    }
+    // if (!this.git.checkoutNewBranch(stagingBranch)) {
+    //   console.error(
+    //     red(
+    //       `Could not create release staging branch: ${stagingBranch}. ` +
+    //         `Aborting...`,
+    //     ),
+    //   );
+    //   process.exit(1);
+    // }
 
     if (needsVersionBump) {
       this.updatePackageJsonVersion(newVersionName);
@@ -221,41 +207,41 @@ class StageReleaseTask {
    * Checks if the user is on an allowed publish branch
    * for the specified version.
    */
-  private _switchToPublishBranch(newVersion: Version): string {
-    const allowedBranch = getAllowedPublishBranch(newVersion);
-    const currentBranchName = this.git.getCurrentBranch();
+  // private _switchToPublishBranch(newVersion: Version): string {
+  //   const allowedBranch = getAllowedPublishBranch(newVersion);
+  //   const currentBranchName = this.git.getCurrentBranch();
 
-    // If current branch already matches one of the allowed publish branches,
-    // just continue by exiting this function and returning the currently
-    // used publish branch.
-    if (allowedBranch === currentBranchName) {
-      console.log(
-        green(`  ✓   Using the "${italic(currentBranchName)}" branch.`),
-      );
-      return currentBranchName;
-    } else {
-      if (!this.git.checkoutBranch(allowedBranch)) {
-        console.error(
-          red(
-            `  ✘   Could not switch to the "${italic(allowedBranch)}" ` +
-              `branch.`,
-          ),
-        );
-        console.error(
-          red(
-            `      Please ensure that the branch exists or manually switch ` +
-              `to the branch.`,
-          ),
-        );
-        process.exit(1);
-      }
+  //   // If current branch already matches one of the allowed publish branches,
+  //   // just continue by exiting this function and returning the currently
+  //   // used publish branch.
+  //   if (allowedBranch === currentBranchName) {
+  //     console.log(
+  //       green(`  ✓   Using the "${italic(currentBranchName)}" branch.`),
+  //     );
+  //     return currentBranchName;
+  //   } else {
+  //     if (!this.git.checkoutBranch(allowedBranch)) {
+  //       console.error(
+  //         red(
+  //           `  ✘   Could not switch to the "${italic(allowedBranch)}" ` +
+  //             `branch.`,
+  //         ),
+  //       );
+  //       console.error(
+  //         red(
+  //           `      Please ensure that the branch exists or manually switch ` +
+  //             `to the branch.`,
+  //         ),
+  //       );
+  //       process.exit(1);
+  //     }
 
-      console.log(
-        green(`  ✓   Switched to the "${italic(allowedBranch)}" branch.`),
-      );
-    }
-    return allowedBranch;
-  }
+  //     console.log(
+  //       green(`  ✓   Switched to the "${italic(allowedBranch)}" branch.`),
+  //     );
+  //   }
+  //   return allowedBranch;
+  // }
 
   /**
    * Updates the version of the project package.json and
@@ -272,106 +258,106 @@ class StageReleaseTask {
   /**
    * Verifies that the local branch is up to date with the given publish branch.
    */
-  private verifyLocalCommitsMatchUpstream(publishBranch: string): void {
-    const upstreamCommitSha = this.git.getRemoteCommitSha(publishBranch);
-    const localCommitSha = this.git.getLocalCommitSha('HEAD');
-    console.log(localCommitSha, upstreamCommitSha);
-    // Check if the current branch is in sync with the remote branch.
-    if (upstreamCommitSha !== localCommitSha) {
-      console.error(
-        red(
-          `  ✘ Cannot stage release. The current branch is not in sync with ` +
-            `the remote branch. Please make sure your local branch "${italic(
-              publishBranch,
-            )}" is up ` +
-            `to date.`,
-        ),
-      );
-      process.exit(1);
-    }
-  }
+  // private verifyLocalCommitsMatchUpstream(publishBranch: string): void {
+  //   const upstreamCommitSha = this.git.getRemoteCommitSha(publishBranch);
+  //   const localCommitSha = this.git.getLocalCommitSha('HEAD');
+  //   console.log(localCommitSha, upstreamCommitSha);
+  //   // Check if the current branch is in sync with the remote branch.
+  //   if (upstreamCommitSha !== localCommitSha) {
+  //     console.error(
+  //       red(
+  //         `  ✘ Cannot stage release. The current branch is not in sync with ` +
+  //           `the remote branch. Please make sure your local branch "${italic(
+  //             publishBranch,
+  //           )}" is up ` +
+  //           `to date.`,
+  //       ),
+  //     );
+  //     process.exit(1);
+  //   }
+  // }
 
   /** Verifies that there are no uncommitted changes in the project. */
-  private verifyNoUncommittedChanges(): void {
-    if (this.git.hasUncommittedChanges()) {
-      console.error(
-        red(
-          `  ✘ Cannot stage release. ` +
-            `There are changes which are not committed and should be stashed.`,
-        ),
-      );
-      process.exit(1);
-    }
-  }
+  // private verifyNoUncommittedChanges(): void {
+  //   if (this.git.hasUncommittedChanges()) {
+  //     console.error(
+  //       red(
+  //         `  ✘ Cannot stage release. ` +
+  //           `There are changes which are not committed and should be stashed.`,
+  //       ),
+  //     );
+  //     process.exit(1);
+  //   }
+  // }
 
   /** Verifies that the latest commit of the current branch is passing all Github statuses. */
-  private async _verifyPassingGithubStatus(
-    expectedPublishBranch: string,
-  ): Promise<void> {
-    const commitRef = this.git.getLocalCommitSha('HEAD');
-    const githubCommitsUrl = getGithubBranchCommitsUrl(
-      this.repositoryOwner,
-      this.repositoryName,
-      expectedPublishBranch,
-    );
-    const { state } = (await this.githubApi.repos.getCombinedStatusForRef({
-      owner: this.repositoryOwner,
-      repo: this.repositoryName,
-      ref: commitRef,
-    })).data;
+  // private async _verifyPassingGithubStatus(
+  //   expectedPublishBranch: string,
+  // ): Promise<void> {
+  //   const commitRef = this.git.getLocalCommitSha('HEAD');
+  //   const githubCommitsUrl = getGithubBranchCommitsUrl(
+  //     this.repositoryOwner,
+  //     this.repositoryName,
+  //     expectedPublishBranch,
+  //   );
+  //   const { state } = (await this.githubApi.repos.getCombinedStatusForRef({
+  //     owner: this.repositoryOwner,
+  //     repo: this.repositoryName,
+  //     ref: commitRef,
+  //   })).data;
 
-    if (state === 'failure') {
-      console.error(
-        red(
-          `  ✘   Cannot stage release. Commit "${commitRef}" does not pass all github ` +
-            `status checks. Please make sure this commit passes all checks before re-running.`,
-        ),
-      );
-      console.error(red(`      Please have a look at: ${githubCommitsUrl}`));
+  //   if (state === 'failure') {
+  //     console.error(
+  //       red(
+  //         `  ✘   Cannot stage release. Commit "${commitRef}" does not pass all github ` +
+  //           `status checks. Please make sure this commit passes all checks before re-running.`,
+  //       ),
+  //     );
+  //     console.error(red(`      Please have a look at: ${githubCommitsUrl}`));
 
-      if (
-        await this._promptConfirm(
-          'Do you want to ignore the Github status and proceed?',
-        )
-      ) {
-        console.info(
-          green(
-            `  ⚠   Upstream commit is failing CI checks, but status has been ` +
-              `forcibly ignored.`,
-          ),
-        );
-        return;
-      }
-      process.exit(1);
-    } else if (state === 'pending') {
-      console.error(
-        red(
-          `  ✘   Commit "${commitRef}" still has pending github statuses that ` +
-            `need to succeed before staging a release.`,
-        ),
-      );
-      console.error(red(`      Please have a look at: ${githubCommitsUrl}`));
+  //     if (
+  //       await this._promptConfirm(
+  //         'Do you want to ignore the Github status and proceed?',
+  //       )
+  //     ) {
+  //       console.info(
+  //         green(
+  //           `  ⚠   Upstream commit is failing CI checks, but status has been ` +
+  //             `forcibly ignored.`,
+  //         ),
+  //       );
+  //       return;
+  //     }
+  //     process.exit(1);
+  //   } else if (state === 'pending') {
+  //     console.error(
+  //       red(
+  //         `  ✘   Commit "${commitRef}" still has pending github statuses that ` +
+  //           `need to succeed before staging a release.`,
+  //       ),
+  //     );
+  //     console.error(red(`      Please have a look at: ${githubCommitsUrl}`));
 
-      if (
-        await this._promptConfirm(
-          'Do you want to ignore the Github status and proceed?',
-        )
-      ) {
-        console.info(
-          green(
-            `  ⚠   Upstream commit is pending CI, but status has been ` +
-              `forcibly ignored.`,
-          ),
-        );
-        return;
-      }
-      process.exit(0);
-    }
+  //     if (
+  //       await this._promptConfirm(
+  //         'Do you want to ignore the Github status and proceed?',
+  //       )
+  //     ) {
+  //       console.info(
+  //         green(
+  //           `  ⚠   Upstream commit is pending CI, but status has been ` +
+  //             `forcibly ignored.`,
+  //         ),
+  //       );
+  //       return;
+  //     }
+  //     process.exit(0);
+  //   }
 
-    console.info(
-      green(`  ✓   Upstream commit is passing all github status checks.`),
-    );
-  }
+  //   console.info(
+  //     green(`  ✓   Upstream commit is passing all github status checks.`),
+  //   );
+  // }
 
   /** Prompts the user with a confirmation question and a specified message. */
   private async _promptConfirm(message: string): Promise<boolean> {
