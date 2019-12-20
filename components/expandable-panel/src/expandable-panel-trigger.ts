@@ -24,7 +24,7 @@ import { DtExpandablePanel } from './expandable-panel';
 
 @Directive({
   // @breaking-change update selector to button[dtExpandablePanel] in 5.0.0
-  selector: '[dtExpandablePanel]',
+  selector: 'button[dtExpandablePanel]',
   exportAs: 'dtExpandablePanelTrigger',
   host: {
     role: 'button',
