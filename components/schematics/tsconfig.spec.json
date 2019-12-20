@@ -3,8 +3,6 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
-    "noUnusedParameters": true,
-    "noUnusedLocals": true,
     "types": ["jest", "node"]
   },
   "exclude": [],
