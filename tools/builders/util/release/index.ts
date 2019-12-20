@@ -14,7 +14,5 @@
  * limitations under the License.
  */
 
-import { bold, italic, red } from 'chalk';
-
-import { GitClient } from './git/git-client';
-import { Version } from './parse-version';
+export * from './parse-version';
+export * from './git-client';

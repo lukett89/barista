@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { bold, italic, red } from 'chalk';
+import { createBuilder } from '@angular-devkit/architect';
 
-import { GitClient } from './git/git-client';
-import { Version } from './parse-version';
+export default createBuilder(publishRelease);

@@ -16,6 +16,8 @@
 
 import { SpawnSyncReturns, spawnSync } from 'child_process';
 
+const GITHUB_URL = 'https://github.com/dynatrace-oss/barista.git';
+
 /**
  * Class that can be used to execute Git commands within a
  * given project directory.
@@ -25,7 +27,7 @@ import { SpawnSyncReturns, spawnSync } from 'child_process';
  * is always the target project directory.
  */
 export class GitClient {
-  constructor(public projectDir: string, public remoteGitUrl: string) {}
+  constructor(public projectDir: string) {}
 
   /** Gets the currently checked out branch for the project directory. */
   getCurrentBranch(): string {
@@ -40,7 +42,7 @@ export class GitClient {
   getRemoteCommitSha(branchName: string): string {
     return this._spawnGitProcess([
       'ls-remote',
-      this.remoteGitUrl,
+      GITHUB_URL,
       '-h',
       `refs/heads/${branchName}`,
     ])
@@ -112,8 +114,7 @@ export class GitClient {
   /** Push committed changes to remote */
   pushBranchOrTagToRemote(branchOrTagName: string): boolean {
     return (
-      this._spawnGitProcess(['push', this.remoteGitUrl, branchOrTagName])
-        .status === 0
+      this._spawnGitProcess(['push', GITHUB_URL, branchOrTagName]).status === 0
     );
   }
 
@@ -134,9 +135,7 @@ export class GitClient {
 
   /** Run a clone into the current directory. */
   clone(): boolean {
-    return (
-      this._spawnGitProcess(['clone', this.remoteGitUrl, '.']).status === 0
-    );
+    return this._spawnGitProcess(['clone', GITHUB_URL, '.']).status === 0;
   }
 
   /**
