@@ -2,9 +2,10 @@
   "name": "@dynatrace/barista-components",
   "version": "5.0.0",
   "peerDependencies": {
-    "@angular/cdk": "8.2.3",
-    "@angular/core": "8.2.3",
-    "@angular/common": "8.2.3",
+    "@angular/animations": "^8.2.12",
+    "@angular/cdk": "^8.2.12",
+    "@angular/core": "^8.2.12",
+    "@angular/common": "^8.2.12",
     "@dynatrace/barista-icons": ">= 3.0.0 < 4",
     "@dynatrace/barista-fonts": ">= 1.0.0 < 2",
     "@types/highcharts": "^5.0.23",

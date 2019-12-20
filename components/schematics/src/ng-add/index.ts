@@ -24,9 +24,11 @@ import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { Schema, ExtendedSchema } from './schema';
 import { readFileFromTree, readJsonAsObjectFromTree } from '../utils';
 import { PackageJson } from '../interfaces/package-json.interface';
-import { updateWorkspaceRule } from './rules/update-workspace-rule';
-import { migrateOrAddDependenciesRule } from './rules/migrate-or-add-dependencies-rule';
-import { updateNgModuleRule } from './rules/update-ng-module-rule';
+import {
+  updateWorkspaceRule,
+  migrateOrAddDependenciesRule,
+  updateNgModuleRule,
+} from './rules';
 
 /** Install the dependencies from the package.json */
 function addInstallTask(options: ExtendedSchema): Rule {

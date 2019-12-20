@@ -14,5 +14,6 @@
  * limitations under the License.
  */
 
-export * from './update-workspace-rule';
 export * from './migrate-or-add-dependencies-rule';
+export * from './update-ng-module-rule';
+export * from './update-workspace-rule';

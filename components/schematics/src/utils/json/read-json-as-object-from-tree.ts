@@ -16,6 +16,7 @@
 
 import { Tree } from '@angular-devkit/schematics/src/tree/interface';
 import { readFileFromTree } from '../read-file-from-tree';
+import { SchematicsException } from '@angular-devkit/schematics';
 
 /**
  * This method is specifically for reading JSON files in a Tree
@@ -28,6 +29,6 @@ export function readJsonAsObjectFromTree<T = {}>(tree: Tree, path: string): T {
   try {
     return JSON.parse(content);
   } catch (e) {
-    throw new Error(`Cannot parse ${path}: ${e.message}`);
+    throw new SchematicsException(`Cannot parse ${path}: ${e.message}`);
   }
 }

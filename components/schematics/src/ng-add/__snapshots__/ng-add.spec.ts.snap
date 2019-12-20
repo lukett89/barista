@@ -156,9 +156,10 @@ Object {
 exports[`Migrate existing angular-components to barista components should update imports of @dynatrace/angular-components to barista-components in package.json 1`] = `
 Object {
   "dependencies": Object {
-    "@angular/cdk": "8.2.3",
-    "@angular/common": "8.2.3",
-    "@angular/core": "8.2.3",
+    "@angular/animations": "^8.2.12",
+    "@angular/cdk": "^8.2.12",
+    "@angular/common": "^8.2.12",
+    "@angular/core": "^8.2.12",
     "@dynatrace/barista-components": "^5.0.0",
     "@dynatrace/barista-fonts": ">= 1.0.0 < 2",
     "@dynatrace/barista-icons": ">= 3.0.0 < 4",
@@ -244,7 +245,7 @@ exports[`New workspace should add @angular/platform-browser-dynamic 1`] = `
 Object {
   "dependencies": Object {
     "@angular/animations": "^8.2.12",
-    "@angular/cdk": "^8.2.3",
+    "@angular/cdk": "^8.2.12",
     "@angular/common": "^8.2.12",
     "@angular/compiler": "^8.2.12",
     "@angular/core": "^8.2.12",
@@ -268,7 +269,8 @@ Object {
 exports[`New workspace should add all the necessary peer dependencies if no barista or angular components are installed 1`] = `
 Object {
   "dependencies": Object {
-    "@angular/cdk": "^8.2.3",
+    "@angular/animations": "^8.2.12",
+    "@angular/cdk": "^8.2.12",
     "@angular/common": "^8.2.12",
     "@angular/compiler": "^8.2.12",
     "@angular/core": "^8.2.12",
@@ -484,11 +486,11 @@ export class AppModule {
 exports[`New workspace should add all the required modules in a fresh create angular app: package.json 1`] = `
 Object {
   "dependencies": Object {
-    "@angular/animations": "~8.2.14",
-    "@angular/cdk": "8.2.3",
-    "@angular/common": "~8.2.14",
+    "@angular/animations": "^8.2.12",
+    "@angular/cdk": "^8.2.12",
+    "@angular/common": "^8.2.12",
     "@angular/compiler": "~8.2.14",
-    "@angular/core": "~8.2.14",
+    "@angular/core": "^8.2.12",
     "@angular/forms": "~8.2.14",
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
@@ -543,7 +545,7 @@ exports[`New workspace should add the \`@angular/animations\` package with the s
 Object {
   "dependencies": Object {
     "@angular/animations": "^8.2.12",
-    "@angular/cdk": "^8.2.3",
+    "@angular/cdk": "^8.2.12",
     "@angular/common": "^8.2.12",
     "@angular/compiler": "^8.2.12",
     "@angular/core": "^8.2.12",
@@ -568,7 +570,7 @@ exports[`New workspace shouldn't add @angular/animations\` package if already in
 Object {
   "dependencies": Object {
     "@angular/animations": "^8.2.12",
-    "@angular/cdk": "8.2.3",
+    "@angular/cdk": "^8.2.12",
     "@angular/common": "^8.2.12",
     "@angular/core": "^8.2.12",
     "@dynatrace/barista-components": "^5.0.0",

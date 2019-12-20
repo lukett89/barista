@@ -22,24 +22,33 @@ import {
 } from '@angular-devkit/schematics';
 import { Tree } from '@angular-devkit/schematics/src/tree/interface';
 import { join } from 'path';
-import {
-  getPackageVersionFromPackageJson,
-  readFileFromTree,
-} from '../../utils';
+import { PackageJson } from '../../interfaces/package-json.interface';
+import { updateJsonInTree } from '../../utils';
 import { ExtendedSchema } from '../schema';
-import { addDependencies } from './add-dependencies';
-import { NodeDependency } from './add-package-json-dependency';
-import { removeDependencies } from './remove-dependencies';
-
-const ERROR_MISSING_DEPENDENCY = (dependency: string) => `
-'The dependency ${dependency} is not installed in your workplace!'`;
 
 /** Check for angular/barista-components in package.json */
 export function migrateOrAddDependenciesRule(options: ExtendedSchema): Rule {
   return (tree: Tree, context: SchematicContext) => {
-    const packageJSON = readFileFromTree(tree, '/package.json');
-    const rules: Rule[] = [];
-    const newDependencies: NodeDependency[] = [];
+    const rules: Rule[] = [
+      // always add the new version of the barista components
+      updateJsonInTree('package.json', (json: PackageJson) => {
+        json.dependencies = json.dependencies || {};
+        json.dependencies['@dynatrace/barista-components'] =
+          options.componentsVersion;
+        return json;
+      }),
+    ];
+
+    for (const peerDependency of Object.keys(options.peerDependencies)) {
+      const version = options.peerDependencies[peerDependency];
+      rules.push(
+        updateJsonInTree('package.json', (json: PackageJson) => {
+          json.dependencies = json.dependencies || {};
+          json.dependencies[peerDependency] = version;
+          return json;
+        }),
+      );
+    }
 
     // if a legacy version of the non open source version is installed
     // we have to migrate it to the @dynatrace/barista-components
@@ -47,46 +56,15 @@ export function migrateOrAddDependenciesRule(options: ExtendedSchema): Rule {
     if (options.migration) {
       // refactor all dt-iconpack and angular-components imports
       rules.push(migrateToVersion5(options));
-      // remove the old dependency from the package json
       rules.push(
-        removeDependencies(['@dynatrace/angular-components'], '/package.json'),
+        updateJsonInTree('package.json', (json: PackageJson) => {
+          json.dependencies = json.dependencies || {};
+          delete json.dependencies['@dynatrace/angular-components'];
+          return json;
+        }),
       );
-    } else {
-      // Check if the following packages are installed otherwise we cannot continue
-      // installing our barista components.
-      ['@angular/core', '@angular/common'].forEach(requiredPgk => {
-        if (!packageJSON.includes(requiredPgk)) {
-          const errorMessage = ERROR_MISSING_DEPENDENCY(requiredPgk);
-          context.logger.error(errorMessage);
-          throw errorMessage;
-        }
-      });
-      const ngCoreVersionTag = getPackageVersionFromPackageJson(
-        tree,
-        '@angular/core',
-      )!;
-
-      if (options.animations) {
-        options.peerDependencies['@angular/animations'] = ngCoreVersionTag;
-      }
     }
 
-    for (const peerDependency of Object.keys(options.peerDependencies)) {
-      const version = options.peerDependencies[peerDependency];
-
-      newDependencies.push({
-        name: peerDependency,
-        version: version,
-      });
-    }
-
-    // always add the new version of the barista components
-    newDependencies.push({
-      name: '@dynatrace/barista-components',
-      version: options.componentsVersion,
-    });
-
-    rules.push(addDependencies(newDependencies, '/package.json'));
     return chain(rules)(tree, context);
   };
 }
