@@ -20,7 +20,7 @@ import {
   SchematicsException,
 } from '@angular-devkit/schematics';
 import { Tree } from '@angular-devkit/schematics/src/tree/interface';
-import { readJsonAsObjectFromTree } from './read-json-as-object-from-tree';
+import { readJsonFromTree } from './read-json-from-tree';
 
 const JSON_NOT_EXISTING_ERROR = (filePath: string) =>
   `The specified JSON file ${filePath} is not existing!`;
@@ -44,7 +44,7 @@ export function updateJsonInTree<T = any, O = T>(
     if (!host.exists(path)) {
       throw new SchematicsException(JSON_NOT_EXISTING_ERROR(path));
     }
-    const jsonObject = readJsonAsObjectFromTree<T>(host, path);
+    const jsonObject = readJsonFromTree<T>(host, path);
     // override the original file with the changes from the callback
     host.overwrite(path, serializeJson(callback(jsonObject, context)));
     return host;

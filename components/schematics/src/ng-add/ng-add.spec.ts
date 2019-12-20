@@ -22,7 +22,7 @@ import {
   createWorkspace,
   runSchematic,
 } from '../testing';
-import { readFileFromTree, readJsonAsObjectFromTree } from '../utils';
+import { readFileFromTree, readJsonFromTree } from '../utils';
 import { Schema } from './schema';
 
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
@@ -76,7 +76,7 @@ describe('Migrate existing angular-components to barista components', () => {
 
   it('should update imports of @dynatrace/angular-components to barista-components in package.json', async () => {
     await testNgAdd(tree, { project: undefined });
-    expect(readJsonAsObjectFromTree(tree, '/package.json')).toMatchSnapshot();
+    expect(readJsonFromTree(tree, '/package.json')).toMatchSnapshot();
   });
 
   it('should add barista icons to the angular.json', async () => {
@@ -89,7 +89,7 @@ describe('Migrate existing angular-components to barista components', () => {
     await addFixtureToTree(tree, 'angular-simple.json', '/angular.json');
     await testNgAdd(tree, { project: 'myapp' });
 
-    expect(readJsonAsObjectFromTree(tree, '/angular.json')).toMatchSnapshot();
+    expect(readJsonFromTree(tree, '/angular.json')).toMatchSnapshot();
   });
 
   it('should include main.scss in angular.json, when typography is set to false ', async () => {
@@ -103,8 +103,8 @@ describe('Migrate existing angular-components to barista components', () => {
     await testNgAdd(tree, { project: 'myapp', typography: false });
 
     expect(
-      readJsonAsObjectFromTree<any>(tree, '/angular.json').projects.myapp
-        .architect.build.options.styles[1],
+      readJsonFromTree<any>(tree, '/angular.json').projects.myapp.architect
+        .build.options.styles[1],
     ).toMatch(/main\.scss$/);
   });
 
@@ -122,7 +122,7 @@ describe('Migrate existing angular-components to barista components', () => {
     );
     await testNgAdd(tree, { project: 'myapp' });
 
-    expect(readJsonAsObjectFromTree(tree, '/angular.json')).toMatchSnapshot();
+    expect(readJsonFromTree(tree, '/angular.json')).toMatchSnapshot();
   });
 
   it('should update the main ngModule with the correct providers', async () => {
@@ -139,7 +139,7 @@ describe('Migrate existing angular-components to barista components', () => {
   it('should update the legacy angular json', async () => {
     await testNgAdd(tree, { project: 'myapp' });
 
-    expect(readJsonAsObjectFromTree(tree, '/angular.json')).toMatchSnapshot();
+    expect(readJsonFromTree(tree, '/angular.json')).toMatchSnapshot();
   });
 });
 
@@ -153,10 +153,10 @@ describe('New workspace', () => {
     expect(
       readFileFromTree(tree, '/apps/myapp/src/app/app.module.ts'),
     ).toMatchSnapshot('app.module.ts');
-    expect(readJsonAsObjectFromTree(tree, '/angular.json')).toMatchSnapshot(
+    expect(readJsonFromTree(tree, '/angular.json')).toMatchSnapshot(
       'angular.json',
     );
-    expect(readJsonAsObjectFromTree(tree, '/package.json')).toMatchSnapshot(
+    expect(readJsonFromTree(tree, '/package.json')).toMatchSnapshot(
       'package.json',
     );
   });
@@ -164,13 +164,13 @@ describe('New workspace', () => {
   it('should add all the necessary peer dependencies if no barista or angular components are installed', async () => {
     await addFixtureToTree(tree, 'package-empty.json', '/package.json');
     await testNgAdd(tree, { animations: false, project: undefined });
-    expect(readJsonAsObjectFromTree(tree, '/package.json')).toMatchSnapshot();
+    expect(readJsonFromTree(tree, '/package.json')).toMatchSnapshot();
   });
 
   it('should add the `@angular/animations` package with the same version as the `@angular/core` package when specified', async () => {
     await addFixtureToTree(tree, 'package-empty.json', '/package.json');
     await testNgAdd(tree, { project: undefined });
-    expect(readJsonAsObjectFromTree(tree, '/package.json')).toMatchSnapshot();
+    expect(readJsonFromTree(tree, '/package.json')).toMatchSnapshot();
   });
 
   it("shouldn't add @angular/animations` package if already installed", async () => {
@@ -186,7 +186,7 @@ describe('New workspace', () => {
     expect(
       readFileFromTree(tree, '/package.json').match(/\@angular\/animations/gim),
     ).toHaveLength(1);
-    expect(readJsonAsObjectFromTree(tree, '/package.json')).toMatchSnapshot();
+    expect(readJsonFromTree(tree, '/package.json')).toMatchSnapshot();
   });
 
   it('should add @angular/platform-browser-dynamic', async () => {
@@ -197,7 +197,7 @@ describe('New workspace', () => {
     );
 
     await testNgAdd(tree, { project: undefined });
-    expect(readJsonAsObjectFromTree(tree, '/package.json')).toMatchSnapshot();
+    expect(readJsonFromTree(tree, '/package.json')).toMatchSnapshot();
   });
 
   it('should install all the dependencies when skipInstall is set to false', async () => {

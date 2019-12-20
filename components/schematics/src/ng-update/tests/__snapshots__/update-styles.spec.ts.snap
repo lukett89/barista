@@ -9,37 +9,37 @@ exports[`v5 dynatrace angular components imports should update deprecated mixin 
 }
 
 .class7 {
-  @include dt-label-font();
+  @include label-font();
   background: red;
 }
 
 .class2 {
-  @include dt-default-font();
+  @include default-font();
   background: red;
 }
 
 .class3 {
-  @include dt-h1-font();
+  @include h1-font();
   background: red;
 }
 
 .class4 {
-  @include dt-h2-font();
+  @include h2-font();
   background: red;
 }
 
 .class5 {
-  @include dt-h3-font();
+  @include h3-font();
   background: red;
 }
 
 .class6 {
-  @include dt-code-font();
+  @include code-font();
   background: red;
 }
 
 .class7 {
-  @include dt-label-font();
+  @include label-font();
   background: red;
 }
 "

@@ -24,7 +24,7 @@ import { SchematicsException } from '@angular-devkit/schematics';
  * @param path The path to the JSON file
  * @returns The JSON data in the file.
  */
-export function readJsonAsObjectFromTree<T = {}>(tree: Tree, path: string): T {
+export function readJsonFromTree<T = {}>(tree: Tree, path: string): T {
   const content = readFileFromTree(tree, path);
   try {
     return JSON.parse(content);

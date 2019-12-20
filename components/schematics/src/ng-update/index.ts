@@ -22,7 +22,7 @@ import {
 import { green, yellow } from 'chalk';
 import { DtTargetVersion } from './migration-rule';
 import {
-  IconpackImportsRule,
+  LegacyImportsRule,
   removeCssSelectors,
   SecondaryEntryPointsRule,
 } from './update-5.0.0';
@@ -46,7 +46,7 @@ export function updateToV5(): Rule {
     removeCssSelectors(),
     createUpgradeRule(
       (DtTargetVersion.V5 as unknown) as TargetVersion,
-      [SecondaryEntryPointsRule, IconpackImportsRule],
+      [SecondaryEntryPointsRule, LegacyImportsRule],
       defaultUpgradeData,
       onMigrationComplete,
     ),

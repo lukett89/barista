@@ -19,14 +19,16 @@ import * as ts from 'typescript';
 import { DtMigrationRule, DtTargetVersion } from '../migration-rule';
 import { createStringLiteral } from '../../utils';
 
-const LEGACY_MODULE_SPECIFIER = '@dynatrace/dt-iconpack';
-const NEW_MODULE_SPECIFIER = '@dynatrace/barista-icons';
+const MODULE_SPECIFIERS = new Map<string, string>([
+  ['@dynatrace/dt-iconpack', '@dynatrace/barista-icons'],
+  ['@dynatrace/angular-components', '@dynatrace/barista-components'],
+]);
 
 /**
  * A migration rule that updates imports from the previous old dt-iconpack to the
  * new barista icons.
  */
-export class IconpackImportsRule extends DtMigrationRule {
+export class LegacyImportsRule extends DtMigrationRule {
   /** The printer instance that creates the new import declarations */
   printer = ts.createPrinter();
 
@@ -46,8 +48,8 @@ export class IconpackImportsRule extends DtMigrationRule {
     const moduleSpecifier = declaration.moduleSpecifier;
     const importLocation = moduleSpecifier.text;
 
-    // If the import module is not @dynatrace/dt-iconpack, skip check.
-    if (importLocation !== LEGACY_MODULE_SPECIFIER) {
+    // If the import module is not one of the legacy import locations, skip check.
+    if (![...MODULE_SPECIFIERS.keys()].includes(importLocation)) {
       return;
     }
 
@@ -55,7 +57,10 @@ export class IconpackImportsRule extends DtMigrationRule {
     const singleQuoteImport = moduleSpecifier.getText()[0] === `'`;
     const newImportSpecifier = this.printer.printNode(
       ts.EmitHint.Unspecified,
-      createStringLiteral(NEW_MODULE_SPECIFIER, singleQuoteImport),
+      createStringLiteral(
+        MODULE_SPECIFIERS.get(importLocation)!,
+        singleQuoteImport,
+      ),
       declaration.getSourceFile(),
     );
 

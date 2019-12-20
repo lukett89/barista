@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-export * from './iconpack-imports-rule';
+export * from './legacy-imports-rule';
 export * from './secondary-entry-points-rule';
 export * from './remove-css-imports-rule';

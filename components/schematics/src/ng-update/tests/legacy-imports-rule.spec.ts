@@ -17,12 +17,12 @@ import { createTestCaseSetup } from '../../testing';
 
 export const migrationCollection = require.resolve('../../migration.json');
 
-describe('v5 dynatrace angular components imports', () => {
-  it('should migrate root imports correctly', async () => {
+describe('Migrate all legacy imports from the icon pack and the angular components', () => {
+  it('Should migrate all legacy imports from the icon pack and the angular components', async () => {
     const { runFixers, appTree, removeTempDir } = await createTestCaseSetup(
       'update-5.0.0',
       migrationCollection,
-      [require.resolve('./dt-iconpack-imports.fixture')],
+      [require.resolve('./legacy-imports.fixture')],
     );
 
     if (runFixers) {
@@ -30,9 +30,7 @@ describe('v5 dynatrace angular components imports', () => {
     }
 
     expect(
-      appTree.readContent(
-        'projects/lib-testing/src/tests/dt-iconpack-imports.ts',
-      ),
+      appTree.readContent('projects/lib-testing/src/tests/legacy-imports.ts'),
     ).toMatchSnapshot();
 
     removeTempDir();

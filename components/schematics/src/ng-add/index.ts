@@ -22,7 +22,7 @@ import {
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { Schema, ExtendedSchema } from './schema';
-import { readFileFromTree, readJsonAsObjectFromTree } from '../utils';
+import { readFileFromTree, readJsonFromTree } from '../utils';
 import { PackageJson } from '../interfaces/package-json.interface';
 import {
   updateWorkspaceRule,
@@ -48,7 +48,7 @@ export default function(options: Schema): Rule {
   return (tree: Tree, context: SchematicContext) => {
     // Package json that we ship with all the peer dependencies and the version
     const packageJSON = readFileFromTree(tree, '/package.json');
-    const baristaPackage = readJsonAsObjectFromTree<PackageJson>(
+    const baristaPackage = readJsonFromTree<PackageJson>(
       tree,
       'node_modules/@dynatrace/barista-components/package.json',
     );
