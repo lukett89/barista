@@ -266,31 +266,6 @@ Object {
 }
 `;
 
-exports[`New workspace should add all the necessary peer dependencies if no barista or angular components are installed 1`] = `
-Object {
-  "dependencies": Object {
-    "@angular/animations": "^8.2.12",
-    "@angular/cdk": "^8.2.12",
-    "@angular/common": "^8.2.12",
-    "@angular/compiler": "^8.2.12",
-    "@angular/core": "^8.2.12",
-    "@dynatrace/barista-components": "^5.0.0",
-    "@dynatrace/barista-fonts": ">= 1.0.0 < 2",
-    "@dynatrace/barista-icons": ">= 3.0.0 < 4",
-    "@types/highcharts": "^5.0.23",
-    "d3-scale": "^3.0.0",
-    "d3-shape": "^1.3.5",
-    "highcharts": "^6.0.7",
-  },
-  "devDependencies": Object {
-    "@angular-devkit/build-angular": "^0.803.15",
-    "@angular-devkit/build-webpack": "^0.803.15",
-    "@angular-devkit/schematics": "^8.3.15",
-    "@angular/cli": "^8.3.15",
-  },
-}
-`;
-
 exports[`New workspace should add all the required modules in a fresh create angular app: angular.json 1`] = `
 Object {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
@@ -539,6 +514,29 @@ Object {
   },
   "version": "0.0.0",
 }
+`;
+
+exports[`New workspace should add import the No operation animations module from angular when animations is set to false 1`] = `
+"import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { AppComponent } from './app.component';
+import { DtIconModule } from '@dynatrace/barista-components/icon';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+@NgModule({
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        BrowserModule,
+        NoopAnimationsModule,
+        DtIconModule.forRoot({ svgIconLocation: '/assets/icons/{{name}}.svg' })
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
+})
+export class AppModule {
+}
+"
 `;
 
 exports[`New workspace should add the \`@angular/animations\` package with the same version as the \`@angular/core\` package when specified 1`] = `

@@ -19,6 +19,7 @@ import * as ts from 'typescript';
 import { DtMigrationRule, DtTargetVersion } from '../migration-rule';
 import { createStringLiteral } from '../../utils';
 
+/** Map of legacy imports that should be rewritten */
 const MODULE_SPECIFIERS = new Map<string, string>([
   ['@dynatrace/dt-iconpack', '@dynatrace/barista-icons'],
   ['@dynatrace/angular-components', '@dynatrace/barista-components'],
@@ -48,8 +49,12 @@ export class LegacyImportsRule extends DtMigrationRule {
     const moduleSpecifier = declaration.moduleSpecifier;
     const importLocation = moduleSpecifier.text;
 
+    const legacyModuleImport = [...MODULE_SPECIFIERS.keys()].find(
+      moduleImport => !!importLocation.match(moduleImport),
+    );
+
     // If the import module is not one of the legacy import locations, skip check.
-    if (![...MODULE_SPECIFIERS.keys()].includes(importLocation)) {
+    if (!legacyModuleImport) {
       return;
     }
 
@@ -58,7 +63,10 @@ export class LegacyImportsRule extends DtMigrationRule {
     const newImportSpecifier = this.printer.printNode(
       ts.EmitHint.Unspecified,
       createStringLiteral(
-        MODULE_SPECIFIERS.get(importLocation)!,
+        importLocation.replace(
+          legacyModuleImport,
+          MODULE_SPECIFIERS.get(legacyModuleImport)!,
+        ),
         singleQuoteImport,
       ),
       declaration.getSourceFile(),

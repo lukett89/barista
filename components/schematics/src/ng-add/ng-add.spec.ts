@@ -161,10 +161,16 @@ describe('New workspace', () => {
     );
   });
 
-  it('should add all the necessary peer dependencies if no barista or angular components are installed', async () => {
+  it('should add import the No operation animations module from angular when animations is set to false', async () => {
     await addFixtureToTree(tree, 'package-empty.json', '/package.json');
-    await testNgAdd(tree, { animations: false, project: undefined });
-    expect(readJsonFromTree(tree, '/package.json')).toMatchSnapshot();
+    await testNgAdd(tree, {
+      animations: false,
+      project: 'myapp',
+      module: '/apps/myapp/src/app/app.module.ts',
+    });
+    expect(
+      readFileFromTree(tree, '/apps/myapp/src/app/app.module.ts'),
+    ).toMatchSnapshot();
   });
 
   it('should add the `@angular/animations` package with the same version as the `@angular/core` package when specified', async () => {

@@ -80,23 +80,26 @@ export function updateNgModuleRule(options: ExtendedSchema): Rule {
         ),
     ];
 
-    if (options.animations) {
-      // update of ngModule should be done before adding imports
-      changes.unshift(sourceFile =>
-        updateNgModuleDecoratorProperties(
-          sourceFile,
-          NgModuleProperties.Imports,
-          ts.createIdentifier('BrowserAnimationsModule'),
-        ),
-      );
-      changes.push(sourceFile =>
-        addImportToSourceFile(
-          sourceFile,
-          ['BrowserAnimationsModule'],
-          '@angular/platform-browser/animations',
-        ),
-      );
-    }
+    // when the user dont want any animations add the NoopAnimationsModule
+    const animationModule = options.animations
+      ? 'BrowserAnimationsModule'
+      : 'NoopAnimationsModule';
+
+    // update of ngModule should be done before adding imports
+    changes.unshift(sourceFile =>
+      updateNgModuleDecoratorProperties(
+        sourceFile,
+        NgModuleProperties.Imports,
+        ts.createIdentifier(animationModule),
+      ),
+    );
+    changes.push(sourceFile =>
+      addImportToSourceFile(
+        sourceFile,
+        [animationModule],
+        '@angular/platform-browser/animations',
+      ),
+    );
 
     const modifiedSourceFile = modifySourceFile(appModuleSourceFile, changes);
 
